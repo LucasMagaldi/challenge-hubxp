@@ -1,24 +1,46 @@
 import { Box, Button, Typography } from "@mui/material";
 import { PlusCircle } from "lucide-react";
 import { DataTable } from "../components/data-table";
-import { useQuery } from "@tanstack/react-query";
-import { getCategories } from "../hooks/api-categories";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getCategories, removeCategory, updateCategory } from "../hooks/api-categories";
 
-
-  
 const columns = [
     { key: "name", label: "Category name" },
+    { key: "edit", label: "Edit", isAction: true },
+    { key: "remove", label: "Remove", isAction: true },
 ];
 
 export function Categories() {
-
-    const { data: getOrdersFn } = useQuery({
+    const queryClient = useQueryClient()
+    const { data: orders } = useQuery({
         queryKey: ['categories'],
         queryFn: () => getCategories(),
     })
 
-    console.log(getOrdersFn)
+    const { mutateAsync: updateCategoryFn } = useMutation({
+        mutationFn: updateCategory,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['categories']);
+        },
+    });
 
+    const { mutateAsync: removeCategoryFn } = useMutation({
+        mutationFn: removeCategory,
+        onError: (error) => {
+            console.error('Error removing category:', error);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['categories']);
+        },
+    });
+
+    const handleEdit = (row: any) => {
+        updateCategoryFn(row);
+    };
+
+    const handleRemove = (row: any) => {
+        removeCategoryFn(row._id);
+    }
     return (
         <Box
             sx={{
@@ -39,7 +61,7 @@ export function Categories() {
                 }}
             >
                 <Typography variant="h6" color="white">
-                Order List
+                Categories List
                 </Typography>
                 <Box sx={{ position: "relative" }}>
                     <Button 
@@ -57,7 +79,7 @@ export function Categories() {
                 </Box>
             </Box>
 
-            <DataTable columns={columns} data={getOrdersFn}/>
+            <DataTable columns={columns} data={orders} onEdit={handleEdit} onRemove={handleRemove}/>
         </Box>
     )
 }

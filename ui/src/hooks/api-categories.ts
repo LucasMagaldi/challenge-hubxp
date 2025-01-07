@@ -5,6 +5,11 @@ export interface IGetCategories {
     name: string
 }
 
+interface UpdateCategoryProps {
+    _id: string
+    name: string
+}
+
 export async function getCategories() {
     try {
         const response = await api.get<IGetCategories[]>('/categories')
@@ -15,9 +20,11 @@ export async function getCategories() {
     }
 }
 
-export async function updateCategory(categoryId: string) {
+export async function updateCategory(category: UpdateCategoryProps) {
     try {
-        await api.put(`/categories/${categoryId}`)
+        await api.put(`/categories/${category._id}`, {
+            name: category.name
+        })
     } catch (error) {
         console.log(error)
     }
