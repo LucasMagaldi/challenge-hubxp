@@ -6,6 +6,11 @@ import {
   IsOptional,
 } from 'class-validator';
 
+interface CategoriesByProduct {
+  _id: string;
+  name: string;
+}
+
 export class CreateProductDTO {
   @IsNotEmpty()
   @IsString()
@@ -25,4 +30,13 @@ export class CreateProductDTO {
   @IsOptional()
   @IsString()
   imageUrl: string;
+}
+
+export interface ProductDTO {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  categories: CategoriesByProduct[];
 }
