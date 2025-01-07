@@ -5,3 +5,8 @@ export class createCategoryDTO {
   @IsString()
   name: string;
 }
+
+export interface CategoryDTO {
+  _id: string;
+  name: string;
+}

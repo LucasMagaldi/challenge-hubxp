@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category } from './categories.schema';
-import { createCategoryDTO } from './categories.dto';
+import { CategoryDTO, createCategoryDTO } from './categories.dto';
 
 @Injectable()
 export class CategoryService {
@@ -15,8 +15,12 @@ export class CategoryService {
     return category.save();
   }
 
-  async findAll(): Promise<Category[]> {
-    return this.categoryModel.find().exec();
+  async findAll(): Promise<CategoryDTO[]> {
+    const category = await this.categoryModel.find().exec();
+    return category.map((category) => ({
+      _id: category._id.toString(),
+      name: category.name,
+    }));
   }
 
   async findOne(id: string): Promise<Category> {
