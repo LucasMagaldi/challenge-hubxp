@@ -13,5 +13,20 @@ export async function getCategories() {
     } catch (error) {
         console.log(error)
     }
+}
 
+export async function updateCategory(categoryId: string) {
+    try {
+        await api.put(`/categories/${categoryId}`)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function removeCategory(categoryId: string) {
+    try {
+        await api.delete(`/categories/${categoryId}`)
+    } catch (error) {
+        console.log(error)
+    }
 }
