@@ -10,7 +10,8 @@ import {
   
   interface IPros<T extends Record<string, React.ReactNode>> {
     columns: Array<{ key: keyof T; label: string }>
-    data: T[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any
   }
   
   export function DataTable<T extends Record<string, React.ReactNode>>({ columns, data }: IPros<T>) {
