@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { Sidebar } from "../components/sidebar";
+import { Header } from "../components/header";
 
 
 export function Layout() {
@@ -15,7 +16,21 @@ export function Layout() {
         }}
     >
       <Sidebar isSidebarOpen={isSidebarOpen} handleOpenSidebar={setIsSidebarOpen} />
-        <Outlet />
+      <Box
+            sx={{
+            flex: 1,
+            transition: "margin-left 0.3s ease",
+            display: "flex",
+            flexDirection: "row",
+            overflow: "auto", 
+            alignContent: "center"
+            }}
+        >
+            <Header />
+            <Box sx={{ padding: 3, flex: 1, marginTop: "60px", marginRight: "auto" }}>
+                <Outlet />
+            </Box>
+        </Box>
     </Box>
   );
 }
