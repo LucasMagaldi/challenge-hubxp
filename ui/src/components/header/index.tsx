@@ -1,6 +1,14 @@
 import { Box, Stack, Typography } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 export function Header() {
+    const location = useLocation();
+
+    const formattedPath = location.pathname
+        .replace('/', '')
+        .replace(/-/g, ' ')
+        .toUpperCase() || 'HOME';
+
     return (
         <Box
             sx={{
@@ -17,7 +25,7 @@ export function Header() {
         >
             <Stack direction="row" spacing={2} alignItems="center" width="100%">
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                Minha Aplicação
+                    {formattedPath}
                 </Typography>
             </Stack>
         </Box>
