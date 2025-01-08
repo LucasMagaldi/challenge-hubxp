@@ -5,7 +5,7 @@ export interface IGetCategories {
     name: string
 }
 
-interface UpdateCategoryProps {
+export interface UpdateCategoryProps {
     _id: string
     name: string
 }
@@ -33,6 +33,16 @@ export async function updateCategory(category: UpdateCategoryProps) {
 export async function removeCategory(categoryId: string) {
     try {
         await api.delete(`/categories/${categoryId}`)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function createCategory({name}: { name: string}) {
+    try {
+        await api.post('/categories', {
+            name: name
+        })
     } catch (error) {
         console.log(error)
     }
