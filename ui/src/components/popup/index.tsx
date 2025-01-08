@@ -6,12 +6,12 @@ import {
     Button,
     Stack,
 } from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
 
 interface Field {
     name: string;
     label: string;
-    value: string | number;
-    onChange: (value: string | number) => void;
+    defaultValue?: string | number;
 }
 
 interface PopUpProps {
@@ -19,10 +19,17 @@ interface PopUpProps {
     onClose: () => void;
     title: string;
     fields: Field[];
-    onSave: () => void;
+    onSave: (data: Record<string, any>) => void;
 }
 
 export function PopUp({ open, onClose, title, fields, onSave }: PopUpProps) {
+    const { control, handleSubmit } = useForm();
+
+    const handleFormSubmit = (data: Record<string, any>) => {
+        onSave(data);
+        onClose();
+    };
+
     return (
         <Modal open={open} onClose={onClose}>
             <Box
@@ -41,25 +48,33 @@ export function PopUp({ open, onClose, title, fields, onSave }: PopUpProps) {
                 <Typography variant="h6" mb={2}>
                     {title}
                 </Typography>
-                <Stack spacing={2}>
-                    {fields.map((field) => (
-                        <TextField
-                            key={field.name}
-                            label={field.label}
-                            value={field.value}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            fullWidth
-                        />
-                    ))}
-                    <Stack direction="row" spacing={2} justifyContent="flex-end">
-                        <Button variant="outlined" onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button variant="contained" onClick={onSave}>
-                            Save
-                        </Button>
+                <form onSubmit={handleSubmit(handleFormSubmit)}>
+                    <Stack spacing={2}>
+                        {fields.map((field) => (
+                            <Controller
+                                key={field.name}
+                                name={field.name}
+                                control={control}
+                                defaultValue={field.defaultValue || ""}
+                                render={({ field: controllerField }) => (
+                                    <TextField
+                                        {...controllerField}
+                                        label={field.label}
+                                        fullWidth
+                                    />
+                                )}
+                            />
+                        ))}
+                        <Stack direction="row" spacing={2} justifyContent="flex-end">
+                            <Button variant="outlined" onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button type="submit" variant="contained">
+                                Save
+                            </Button>
+                        </Stack>
                     </Stack>
-                </Stack>
+                </form>
             </Box>
         </Modal>
     );

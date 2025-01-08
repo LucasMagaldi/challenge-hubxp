@@ -12,7 +12,6 @@ interface BaseListProps<T> {
     editMutation?: (item: T) => Promise<void>;
     removeMutation?: (id: string) => Promise<void>;
 }
-
 export function BaseList<T>({
     title,
     columns,
@@ -24,47 +23,23 @@ export function BaseList<T>({
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalType, setModalType] = useState<"add" | "edit">("add");
     const [selectedRow, setSelectedRow] = useState<Partial<T> | null>(null);
-    const [fields, setFields] = useState<any[]>([]);
 
     const handleOpenModal = (type: "add" | "edit", row?: T) => {
         setModalType(type);
-
-        const initialRow = type === "add"
-            ? columns.reduce((acc, col) => ({ ...acc, [col.key]: "" }), {})
-            : row || null;
-
-        setSelectedRow(initialRow);
-
-        const dynamicFields = columns
-            .filter((col) => !col.isAction)
-            .map((col) => ({
-                name: String(col.key),
-                label: col.label,
-                value: initialRow ? initialRow[col.key] : "",
-                onChange: (value: any) => {
-                    console.log(value)
-                    setSelectedRow((prev) => (prev ? { ...prev, [col.key]: value } : prev));
-                },
-            }));
-
-        setFields(dynamicFields);
+        setSelectedRow(row || null);
         setModalOpen(true);
     };
 
-    const handleSave = async () => {
-        if (!selectedRow) return;
-
+    const handleSave = async (data: Record<string, any>) => {
         try {
-            if (modalType === "edit") {
-                await editMutation?.(selectedRow as T);
+            if (modalType === "edit" && selectedRow) {
+                await editMutation?.({ ...selectedRow, ...data } as T);
             } else {
-                await addMutation?.(selectedRow as T);
+                await addMutation?.(data as T);
             }
         } catch (error) {
             console.error("Error saving item:", error);
         }
-
-        setModalOpen(false);
     };
 
     const handleRemove = async (id: string) => {
@@ -123,7 +98,13 @@ export function BaseList<T>({
                 <PopUp
                     open={isModalOpen}
                     onClose={() => setModalOpen(false)}
-                    fields={fields}
+                    fields={columns
+                        .filter((col) => !col.isAction)
+                        .map((col) => ({
+                            name: String(col.key),
+                            label: col.label,
+                            defaultValue: selectedRow ? selectedRow[col.key] : "",
+                        }))}
                     onSave={handleSave}
                     title={modalType === "edit" ? `Edit ${title}` : `Add ${title}`}
                 />
