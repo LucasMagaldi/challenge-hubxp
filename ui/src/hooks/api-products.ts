@@ -50,3 +50,16 @@ export async function createProduct({ name, description, price}: IPostProduct) {
         console.log(error)
     }
 }
+
+export async function updateProduct({ _id, name, imageUrl, price, description }: IGetProducts) {
+    try {
+        await api.patch(`/products/${_id}`, {
+            name,
+            description,
+            price,
+            imageUrl
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
