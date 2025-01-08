@@ -7,23 +7,34 @@ import {
     Stack,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-
-interface Field {
-    name: string;
-    label: string;
-    defaultValue?: string | number;
-}
+import { ZodSchema } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface PopUpProps {
     open: boolean;
     onClose: () => void;
     title: string;
-    fields: Field[];
+    validationSchema: ZodSchema;
+    defaultValues: Record<string, any>;
     onSave: (data: Record<string, any>) => void;
 }
 
-export function PopUp({ open, onClose, title, fields, onSave }: PopUpProps) {
-    const { control, handleSubmit } = useForm();
+export function PopUp({
+    open,
+    onClose,
+    title,
+    validationSchema,
+    defaultValues,
+    onSave,
+}: PopUpProps) {
+    const {
+        control,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: zodResolver(validationSchema),
+        defaultValues,
+    });
 
     const handleFormSubmit = (data: Record<string, any>) => {
         onSave(data);
@@ -50,26 +61,35 @@ export function PopUp({ open, onClose, title, fields, onSave }: PopUpProps) {
                 </Typography>
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <Stack spacing={2}>
-                        {fields.map((field) => (
+                        {Object.keys(defaultValues).map((key) => (
                             <Controller
-                                key={field.name}
-                                name={field.name}
+                                key={key}
+                                name={key}
                                 control={control}
-                                defaultValue={field.defaultValue || ""}
-                                render={({ field: controllerField }) => (
+                                render={({ field }) => (
                                     <TextField
-                                        {...controllerField}
-                                        label={field.label}
+                                        {...field}
+                                        label={key.charAt(0).toUpperCase() + key.slice(1)}
                                         fullWidth
+                                        error={!!errors[key]}
+                                        helperText={errors[key]?.message?.toString()}
                                     />
                                 )}
                             />
                         ))}
                         <Stack direction="row" spacing={2} justifyContent="flex-end">
-                            <Button variant="outlined" onClick={onClose}>
+                            <Button
+                                variant="outlined"
+                                onClick={onClose}
+                                disabled={isSubmitting}
+                            >
                                 Cancel
                             </Button>
-                            <Button type="submit" variant="contained">
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                disabled={isSubmitting}
+                            >
                                 Save
                             </Button>
                         </Stack>
