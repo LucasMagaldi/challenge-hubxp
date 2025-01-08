@@ -57,7 +57,7 @@ export class DashboardService {
       }
     }
 
-    // Agregação para métricas
+    // Agregação para métricas e número de orders por data
     const metrics = await this.orderModel.aggregate([
       { $match: match },
       {
@@ -68,10 +68,32 @@ export class DashboardService {
           averageOrderValue: { $avg: '$total' },
         },
       },
+      {
+        $lookup: {
+          from: 'orders',
+          pipeline: [
+            { $match: match },
+            {
+              $group: {
+                _id: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
+                ordersPerDate: { $sum: 1 },
+              },
+            },
+          ],
+          as: 'ordersByDate',
+        },
+      },
     ]);
 
-    return (
-      metrics[0] || { totalOrders: 0, totalRevenue: 0, averageOrderValue: 0 }
-    );
+    const aggregatedMetrics = metrics[0] || {
+      totalOrders: 0,
+      totalRevenue: 0,
+      averageOrderValue: 0,
+    };
+
+    return {
+      ...aggregatedMetrics,
+      ordersByDate: aggregatedMetrics.ordersByDate || [],
+    };
   }
 }
