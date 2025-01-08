@@ -116,6 +116,9 @@ export function BaseList<T>({
                 columns={columns}
                 data={(fetchData || []).map((item) => ({
                     ...item,
+                    products: Array.isArray(item.products)
+                    ? item.products.map((product: any) => product.name).join(", ") // Transforma em string
+                    : item.products,
                     categories: Array.isArray(item.categories)
                         ? item.categories.map((cat) => (cat as any).name).join(", ")
                         : item.categories,
