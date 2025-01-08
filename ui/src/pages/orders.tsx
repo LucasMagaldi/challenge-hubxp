@@ -1,17 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BaseList } from "../components/base-list";
-import { createOrder, getOrders, IGetOrders, removeOrder } from "../hooks/api-orders";
+import { createOrder, getOrders, IGetOrders, removeOrder, updateOrder } from "../hooks/api-orders";
+import { z } from "zod";
 
 const columns = [
     { key: "total", label: "Total" },
     { key: "products", label: "Products" },
-    { key: "Date", label: "Order Date" },
+    { key: "date", label: "Order Date" },
     { key: "edit", label: "Edit", isAction: true },
     { key: "remove", label: "Remove", isAction: true },
 ];
 
+const orderSchema = z.object({
+    total: z.coerce.number().min(0, "Total must be a positive number"),
+});
+
 export function Orders() {
     const queryClient = useQueryClient();
+
     const { data: orders } = useQuery({
         queryKey: ["orders"],
         queryFn: getOrders,
@@ -20,38 +26,42 @@ export function Orders() {
     const processedOrders = (orders || []).map((order) => ({
         ...order,
         products: Array.isArray(order.products)
-            ? order.products.map((product) => product.name).join(", ") // string
+            ? order.products.map((product) => product.name).join(", ")
             : order.products,
     }));
 
-
     const { mutateAsync: createOrderFn } = useMutation({
         mutationFn: createOrder,
-        onError: (error) => {
-            console.error('Error removing order:', error);
-        },
         onSuccess: () => {
-            queryClient.invalidateQueries(['orders']);
+            queryClient.invalidateQueries(["orders"]);
+        },
+    });
+
+    const { mutateAsync: updateOrderFn } = useMutation({
+        mutationFn: updateOrder,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["orders"]);
         },
     });
 
     const { mutateAsync: removeOrderFn } = useMutation({
         mutationFn: removeOrder,
         onError: (error) => {
-            console.error('Error removing order:', error);
+            console.error("Error removing order:", error);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries(['orders']);
+            queryClient.invalidateQueries(["orders"]);
         },
     });
 
-
     return (
         <BaseList<IGetOrders>
-            title="Order list"
+            title="Order List"
             columns={columns}
             fetchData={processedOrders}
+            validationSchema={orderSchema}
             removeMutation={removeOrderFn}
+            editMutation={updateOrderFn}
             addMutation={createOrderFn}
         />
     );
