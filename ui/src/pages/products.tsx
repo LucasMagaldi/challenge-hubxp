@@ -18,6 +18,14 @@ export function Products() {
         queryFn: getProducts,
     });
 
+    const processedProducts = (products || []).map((product) => ({
+        ...product,
+        categories: Array.isArray(product.categories)
+            ? product.categories.map((cat) => cat.name).join(", ") // Transforma em string
+            : product.categories,
+    }));
+
+
     const { mutateAsync: createProductFn } = useMutation({
         mutationFn: createProduct,
         onError: (error) => {
@@ -43,7 +51,7 @@ export function Products() {
         <BaseList<IGetProducts>
             title="Product list"
             columns={columns}
-            fetchData={products}
+            fetchData={processedProducts}
             removeMutation={removeProductFn}
             addMutation={createProductFn}
         />

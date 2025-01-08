@@ -36,16 +36,16 @@ export function BaseList<T>({
         setSelectedRow(initialRow);
 
         const dynamicFields = columns
-        .filter((col) => !col.isAction)
-        .map((col) => ({
-            name: String(col.key),
-            label: col.label,
-            value: row ? row[col.key] : "",
-            onChange: (value: any) => {
-                console.log(value);
-                setSelectedRow((prev) => (prev ? { ...prev, [col.key]: value } : prev)); 
-            },
-        }));
+            .filter((col) => !col.isAction)
+            .map((col) => ({
+                name: String(col.key),
+                label: col.label,
+                value: initialRow ? initialRow[col.key] : "",
+                onChange: (value: any) => {
+                    console.log(value)
+                    setSelectedRow((prev) => (prev ? { ...prev, [col.key]: value } : prev));
+                },
+            }));
 
         setFields(dynamicFields);
         setModalOpen(true);
@@ -114,15 +114,7 @@ export function BaseList<T>({
 
             <DataTable
                 columns={columns}
-                data={(fetchData || []).map((item) => ({
-                    ...item,
-                    products: Array.isArray(item.products)
-                    ? item.products.map((product: any) => product.name).join(", ") // Transforma em string
-                    : item.products,
-                    categories: Array.isArray(item.categories)
-                        ? item.categories.map((cat) => (cat as any).name).join(", ")
-                        : item.categories,
-                }))}
+                data={fetchData}
                 onEdit={(row) => handleOpenModal("edit", row)}
                 onRemove={(row) => handleRemove((row as any)._id)}
             />

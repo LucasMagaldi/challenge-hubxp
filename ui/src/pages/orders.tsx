@@ -17,6 +17,14 @@ export function Orders() {
         queryFn: getOrders,
     });
 
+    const processedOrders = (orders || []).map((order) => ({
+        ...order,
+        products: Array.isArray(order.products)
+            ? order.products.map((product) => product.name).join(", ") // string
+            : order.products,
+    }));
+
+
     const { mutateAsync: createOrderFn } = useMutation({
         mutationFn: createOrder,
         onError: (error) => {
@@ -42,7 +50,7 @@ export function Orders() {
         <BaseList<IGetOrders>
             title="Order list"
             columns={columns}
-            fetchData={orders}
+            fetchData={processedOrders}
             removeMutation={removeOrderFn}
             addMutation={createOrderFn}
         />
