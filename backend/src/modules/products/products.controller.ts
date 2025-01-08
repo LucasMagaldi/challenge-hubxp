@@ -4,8 +4,8 @@ import {
   Post,
   Param,
   Body,
-  Put,
   Delete,
+  Patch,
 } from '@nestjs/common';
 import { ProductService } from './products.service';
 import { CreateProductDTO } from './products.dto';
@@ -29,7 +29,7 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: Partial<CreateProductDTO>,
