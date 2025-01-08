@@ -33,9 +33,9 @@ export function DataTable<T extends Record<string, React.ReactNode>>({
         setModalOpen(true);
     };
 
-    const handleSave = () => {
+    const handleSave = (updatedData: Record<string, any>) => {
         if (onEdit && selectedRow) {
-            onEdit(selectedRow);
+            onEdit({ ...selectedRow, ...updatedData }); // Atualiza os dados com o que foi enviado
         }
         setModalOpen(false);
     };
@@ -54,11 +54,7 @@ export function DataTable<T extends Record<string, React.ReactNode>>({
             .map((column) => ({
                 name: String(column.key),
                 label: column.label,
-                value: row[column.key] || "", 
-                onChange: (value: any) =>
-                    setSelectedRow((prev) =>
-                        prev ? { ...prev, [column.key]: value } : prev
-                    ),
+                value: row[column.key] || "", // inicializa os valor
             }));
     };
 
