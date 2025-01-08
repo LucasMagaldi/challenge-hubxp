@@ -3,6 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { PlusCircle } from "lucide-react";
 import { DataTable } from "../data-table";
 import { PopUp } from "../popup";
+import { z } from "zod";
 
 interface BaseListProps<T> {
     title: string;
@@ -11,7 +12,9 @@ interface BaseListProps<T> {
     addMutation?: (item: T) => Promise<void>;
     editMutation?: (item: T) => Promise<void>;
     removeMutation?: (id: string) => Promise<void>;
+    validationSchema: z.ZodSchema<any>;
 }
+
 export function BaseList<T>({
     title,
     columns,
@@ -19,6 +22,7 @@ export function BaseList<T>({
     addMutation,
     editMutation,
     removeMutation,
+    validationSchema,
 }: BaseListProps<T>) {
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalType, setModalType] = useState<"add" | "edit">("add");
@@ -49,6 +53,9 @@ export function BaseList<T>({
             console.error("Error removing item:", error);
         }
     };
+
+    // tirar as colunas de acoes
+    const filteredColumns = columns.filter((col) => !col.isAction);
 
     return (
         <Box
@@ -98,15 +105,13 @@ export function BaseList<T>({
                 <PopUp
                     open={isModalOpen}
                     onClose={() => setModalOpen(false)}
-                    fields={columns
-                        .filter((col) => !col.isAction)
-                        .map((col) => ({
-                            name: String(col.key),
-                            label: col.label,
-                            defaultValue: selectedRow ? selectedRow[col.key] : "",
-                        }))}
-                    onSave={handleSave}
                     title={modalType === "edit" ? `Edit ${title}` : `Add ${title}`}
+                    validationSchema={validationSchema}
+                    defaultValues={
+                        selectedRow ||
+                        filteredColumns.reduce((acc, col) => ({ ...acc, [col.key]: "" }), {})
+                    }
+                    onSave={handleSave}
                 />
             )}
         </Box>
