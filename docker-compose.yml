@@ -15,6 +15,15 @@ services:
       - AWS_ACCESS_KEY_ID=dummy
     depends_on:
       - mongodb
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8080
   
   serverless:
     build:
