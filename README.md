@@ -53,8 +53,32 @@ LocalStack: Verify S3 bucket setup at http://localhost:4566.
 MongoDB: Use a MongoDB client or CLI to connect to mongodb://root:root@localhost:27017.
 
 # Development Notes
-- LocalStack: Simulates AWS services like S3 locally. Ensure localstack-data volume persists bucket data.
-  
+## LocalStack: Simulates AWS services like S3 locally. Ensure localstack-data volume persists bucket data. 
+## Serverless Function Endpoint
+- URL:http://localhost:3000/dev/process-sales-report
+
+- Method: GET
+
+- Query Parameters:
+1.startDate (string, required): Start date of the range in the format YYYY-MM-DD.
+2. endDate (string, required): End date of the range in the format YYYY-MM-DD.
+
+- Request Example:
+1. GET /dev/process-sales-report?startDate=2025-01-01&endDate=2025-01-08 HTTP/1.1
+* Host: localhost:3000
+
+- MongoDB Connection:
+The function connects to the MongoDB database using the URL specified in the MONGO_URL environment variable. If the connection fails, the function logs an error and does not process the report.
+
+- Response:
+{
+  "message": "Sales report generated successfully!",
+  "report": {
+    "totalRevenue": 888,
+    "totalOrders": 7,
+    "averageOrderValue": 127
+  }
+}
 
 ## Ensure all services are running using docker-compose ps.
 - Verify the environment variables MONGO_URL, MONGO_INITDB_ROOT_USERNAME, and MONGO_INITDB_ROOT_PASSWORD.
