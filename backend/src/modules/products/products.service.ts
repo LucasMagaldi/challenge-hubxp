@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product } from './products.schema';
 import { CreateProductDTO, ProductDTO } from './products.dto';
+import { S3Service } from '../s3/s3.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<Product>,
+    private readonly s3Service: S3Service,
   ) {}
 
   async create(createProductDto: CreateProductDTO): Promise<Product> {
@@ -45,16 +47,19 @@ export class ProductService {
   async update(
     id: string,
     updateProductDto: Partial<CreateProductDTO>,
+    file?: Express.Multer.File,
   ): Promise<Product> {
-    const product = await this.productModel.findByIdAndUpdate(
-      id,
-      updateProductDto,
-      {
-        new: true,
-      },
-    );
+    const product = await this.productModel.findById(id);
     if (!product) throw new NotFoundException('Product not found');
-    return product;
+
+    Object.assign(product, updateProductDto);
+    console.log('Before S3 Service');
+    if (file) {
+      const imageUrl = await this.s3Service.uploadFile(file);
+      product.imageUrl = imageUrl;
+    }
+
+    return product.save();
   }
 
   async remove(id: string): Promise<void> {

@@ -6,9 +6,12 @@ import {
   Body,
   Delete,
   Patch,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ProductService } from './products.service';
 import { CreateProductDTO } from './products.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductController {
@@ -30,11 +33,14 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @UseInterceptors(FileInterceptor('file'))
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: Partial<CreateProductDTO>,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
-    return this.productService.update(id, updateProductDto);
+    console.log(updateProductDto, file);
+    return this.productService.update(id, updateProductDto, file);
   }
 
   @Delete(':id')
