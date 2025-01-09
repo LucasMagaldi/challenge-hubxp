@@ -12,8 +12,17 @@ export class ProductService {
     private readonly s3Service: S3Service,
   ) {}
 
-  async create(createProductDto: CreateProductDTO): Promise<Product> {
+  async create(
+    createProductDto: CreateProductDTO,
+    file?: Express.Multer.File,
+  ): Promise<Product> {
     const product = new this.productModel(createProductDto);
+
+    if (file) {
+      const imageUrl = await this.s3Service.uploadFile(file);
+      product.imageUrl = imageUrl;
+    }
+
     return product.save();
   }
 

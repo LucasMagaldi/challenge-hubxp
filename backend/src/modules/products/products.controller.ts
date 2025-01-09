@@ -18,8 +18,12 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  async create(@Body() createProductDto: CreateProductDTO) {
-    return this.productService.create(createProductDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @Body() createProductDto: CreateProductDTO,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.productService.create(createProductDto, file);
   }
 
   @Get()
