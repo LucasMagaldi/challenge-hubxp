@@ -4,11 +4,11 @@ This project is a fullstack application for resolve the challenge proposed By Hu
 The project uses the services such as a NestJS backend, a React frontend, a Serverless Framework app, MongoDB, and LocalStack for AWS S3 simulation.
 
 ## Features
-Backend: A NestJS-based REST API.
-Frontend: A React application built with Vite.
-Serverless: Lambda functions for asynchronous tasks.
-MongoDB: Database for persistent storage.
-LocalStack: Simulated AWS S3 environment for local development.
+- Backend: A NestJS-based REST API.
+- Frontend: A React application built with Vite.
+- Serverless: Lambda functions for asynchronous tasks.
+- MongoDB: Database for persistent storage.
+- LocalStack: Simulated AWS S3 environment for local development.
 
 ## Prerequisites
 Before running this project, ensure you have the following installed:
