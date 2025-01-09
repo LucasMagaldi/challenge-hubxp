@@ -53,13 +53,12 @@ LocalStack: Verify S3 bucket setup at http://localhost:4566.
 MongoDB: Use a MongoDB client or CLI to connect to mongodb://root:root@localhost:27017.
 
 # Development Notes
-## LocalStack: Simulates AWS services like S3 locally. Ensure localstack-data volume persists bucket data. 
-## Serverless Function Endpoint
-- URL:http://localhost:3000/dev/process-sales-report
+### LocalStack: Simulates AWS services like S3 locally. Ensure localstack-data volume persists bucket data. 
+### Serverless Function Endpoint
 
+## URL:http://localhost:3000/dev/process-sales-report
 - Method: GET
-
-- Query Parameters:
+## Query Parameters:
 - startDate (string, required): Start date of the range in the format YYYY-MM-DD.
 - endDate (string, required): End date of the range in the format YYYY-MM-DD.
 
