@@ -63,10 +63,7 @@ MongoDB: Use a MongoDB client or CLI to connect to mongodb://root:root@localhost
 1.startDate (string, required): Start date of the range in the format YYYY-MM-DD.
 2. endDate (string, required): End date of the range in the format YYYY-MM-DD.
 
-- Request Example:
-1. GET /dev/process-sales-report?startDate=2025-01-01&endDate=2025-01-08 HTTP/1.1
-* Host: localhost:3000
-
+- Request Example: GET  localhost:3000/dev/process-sales-report?startDate=2025-01-01&endDate=2025-01-08 HTTP/1.1
 - MongoDB Connection:
 The function connects to the MongoDB database using the URL specified in the MONGO_URL environment variable. If the connection fails, the function logs an error and does not process the report.
 
