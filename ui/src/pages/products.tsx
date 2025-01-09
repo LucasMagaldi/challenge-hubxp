@@ -5,8 +5,9 @@ import { getProducts, createProduct, removeProduct, IGetProducts, updateProduct 
 const columns=[
     { key: "name", label: "Product Name" },
     { key: "description", label: "Description" },
-    { key: "price", label: "Price" },
+    { key: "price", label: "$ Price" },
     { key: "categories", label: "Categories" },
+    { key: "imageUrl", label: "Image URL"},
     { key: "edit", label: "Edit", isAction: true },
     { key: "remove", label: "Remove", isAction: true },
 ]
@@ -16,6 +17,10 @@ const productSchema = z.object({
     description: z.string().min(5, "Description should have at least 5 characters"),
     price: z.coerce.number().min(0, "Price must be a positive number"),
     categories: z.string().optional(),
+    imageUrl: z
+    .instanceof(File)
+    .refine((file) => file.type.startsWith("image/"), "Only image files are allowed")
+    .optional(),
 });
 
 export function Products() {
