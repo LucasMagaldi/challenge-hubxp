@@ -61,22 +61,57 @@ export function PopUp({
                 </Typography>
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <Stack spacing={2}>
-                        {Object.keys(defaultValues).map((key) => (
-                            <Controller
-                                key={key}
-                                name={key}
+                        {Object.keys(defaultValues).map((key) =>
+                            key === "imageUrl" ? (
+                                <Controller
+                                name="imageUrl"
                                 control={control}
                                 render={({ field }) => (
+                                    <Box>
+                                    <Typography variant="subtitle1" gutterBottom>
+                                        Upload Image
+                                    </Typography>
                                     <TextField
-                                        {...field}
-                                        label={key.charAt(0).toUpperCase() + key.slice(1)}
+                                        type="file"
+                                        InputLabelProps={{
+                                        shrink: true,
+                                        }}
+                                        inputProps={{
+                                        accept: "image/*",
+                                        }}
+                                        onChange={(e) => {
+                                            console.log(e)
+                                            const file = e.target.files?.[0] || null;
+                                            field.onChange(file); 
+                                        }}
+                                        error={!!errors.imageUrl}
                                         fullWidth
-                                        error={!!errors[key]}
-                                        helperText={errors[key]?.message?.toString()}
                                     />
+                                    {errors.imageUrl && (
+                                        <Typography color="error" variant="caption">
+                                        {errors.imageUrl.message?.toString()}
+                                        </Typography>
+                                    )}
+                                    </Box>
                                 )}
-                            />
-                        ))}
+                                />
+                            ) : (
+                                <Controller
+                                    key={key}
+                                    name={key}
+                                    control={control}
+                                    render={({ field }) => (
+                                        <TextField
+                                            {...field}
+                                            label={key.charAt(0).toUpperCase() + key.slice(1)}
+                                            fullWidth
+                                            error={!!errors[key]}
+                                            helperText={errors[key]?.message?.toString()}
+                                        />
+                                    )}
+                                />
+                            )
+                        )}
                         <Stack direction="row" spacing={2} justifyContent="flex-end">
                             <Button
                                 variant="outlined"
