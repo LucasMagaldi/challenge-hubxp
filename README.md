@@ -1,32 +1,32 @@
-## HUBXP - CHALLENGE
+# HUBXP - CHALLENGE
 ## Fullstack Application with Docker, NestJS, React, and Serverless Framework
 This project is a fullstack application for resolve the challenge proposed By Hubxp.
 The project uses the services such as a NestJS backend, a React frontend, a Serverless Framework app, MongoDB, and LocalStack for AWS S3 simulation.
 
-## Features
+# Features
 - Backend: A NestJS-based REST API.
 - Frontend: A React application built with Vite.
 - Serverless: Lambda functions for asynchronous tasks.
 - MongoDB: Database for persistent storage.
 - LocalStack: Simulated AWS S3 environment for local development.
 
-## Prerequisites
+# Prerequisites
 Before running this project, ensure you have the following installed:
 
 - Docker
 - Docker Compose
 
-##  Environment Variables
-# Backend Service (backend)
+#  Environment Variables
+## Backend Service (backend)
 - MONGO_URL: MongoDB connection string.
 - S3_BUCKET_NAME: Name of the S3 bucket for image storage.
 - S3_ENDPOINT: Endpoint for LocalStack S3.
 - AWS_REGION: AWS region for S3.
 - AWS_SECRET_ACCESS_KEY: AWS secret access key for authentication.
 - AWS_ACCESS_KEY_ID: AWS access key ID for authentication.
-# Frontend Service (ui)
+## Frontend Service (ui)
 - VITE_API_URL: Backend API URL.
-# Serverless Service (serverless)
+## Serverless Service (serverless)
 - MONGO_URL: MongoDB connection string.
 
 ## Services
@@ -52,13 +52,13 @@ Serverless: Access serverless endpoints via http://localhost:3000.
 LocalStack: Verify S3 bucket setup at http://localhost:4566.
 MongoDB: Use a MongoDB client or CLI to connect to mongodb://root:root@localhost:27017.
 
-## Development Notes
+# Development Notes
 - LocalStack: Simulates AWS services like S3 locally. Ensure localstack-data volume persists bucket data.
   
 
-# Ensure all services are running using docker-compose ps.
+## Ensure all services are running using docker-compose ps.
 - Verify the environment variables MONGO_URL, MONGO_INITDB_ROOT_USERNAME, and MONGO_INITDB_ROOT_PASSWORD.
-# Useful Commands
+## Useful Commands
 - Stop all services: docker-compose down
 - Rebuild services: docker-compose up --build
 - Access service logs: docker-compose logs <service-name>
