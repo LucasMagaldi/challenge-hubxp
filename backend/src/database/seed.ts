@@ -5,9 +5,12 @@ import { ProductSchema } from 'src/modules/products/products.schema';
 
 async function seedDatabase() {
   const connection: Connection = await mongoose
-    .createConnection(process.env.MONGO_URL, {
-      authSource: 'admin',
-    })
+    .createConnection(
+      process.env.MONGO_URL || 'mongodb://root:root@localhost:27017/challenge',
+      {
+        authSource: 'admin',
+      },
+    )
     .asPromise();
 
   try {
