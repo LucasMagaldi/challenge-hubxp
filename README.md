@@ -10,6 +10,9 @@ The project uses the services such as a NestJS backend, a React frontend, a Serv
 - MongoDB: Database for persistent storage.
 - LocalStack: Simulated AWS S3 environment for local development.
 
+# Infrastructure Configuration with Docker Compose
+The entire infrastructure required for this project is already pre-configured in the Docker Compose file. This setup simplifies the deployment and orchestration of the necessary services.
+
 # Prerequisites
 Before running this project, ensure you have the following installed:
 
