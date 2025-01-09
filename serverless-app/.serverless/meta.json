@@ -1,0 +1,50 @@
+{
+  "/app": {
+    "versionSfCore": null,
+    "versionFramework": "4.4.18",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeServiceName": null,
+    "servicePath": "/app",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "hubxp-serverless",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x"
+      },
+      "functions": {
+        "hello": {
+          "handler": "handler.hello",
+          "events": [
+            {
+              "http": {
+                "path": "hello",
+                "method": "get"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "serviceRawFile": "service: hubxp-serverless\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n\r\nfunctions:\r\n  hello:\r\n    handler: handler.hello\r\n    events:\r\n      - http:\r\n          path: hello\r\n          method: get\r\n",
+    "command": [
+      "offline"
+    ],
+    "options": {
+      "host": "0.0.0.0"
+    },
+    "error": {
+      "message": "You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".",
+      "stack": "Error: You must sign in or use a license key with Serverless Framework V.4 and later versions. Please use \"serverless login\".\n    at Authentication.getAuthenticatedData (file:///root/.serverless/releases/4.4.18/package/dist/sf-core.js:686:10535)\n    at async Authentication.resolverAuthenticate (file:///root/.serverless/releases/4.4.18/package/dist/sf-core.js:688:20566)\n    at async _Meta.authenticate (file:///root/.serverless/releases/4.4.18/package/dist/sf-core.js:696:12221)\n    at async _Meta.authenticateAndResolve (file:///root/.serverless/releases/4.4.18/package/dist/sf-core.js:696:11642)\n    at async route (file:///root/.serverless/releases/4.4.18/package/dist/sf-core.js:1010:14685)\n    at async Object.run2 [as run] (file:///root/.serverless/releases/4.4.18/package/dist/sf-core.js:1010:15173)\n    at async run3 (file:///root/.serverless/releases/4.4.18/package/dist/sf-core.js:1010:16435)"
+    },
+    "machineId": "f148fe25f19e13daa9da2968f757090e",
+    "stage": "dev",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

@@ -1,0 +1,18 @@
+service: sales-reports-service
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+
+plugins:
+  - serverless-offline
+
+functions:
+  processSalesReport:
+    handler: handler.processSalesReport
+    timeout: 60
+    events:
+      - http:
+          path: process-sales-report
+          method: get
