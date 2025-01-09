@@ -4,7 +4,9 @@ import { BaseList } from "../components/base-list";
 import { createOrder, getOrders, IGetOrders, removeOrder, updateOrder } from "../hooks/api-orders";
 import { z } from "zod";
 
-const columns = [
+type ProcessedOrder = Omit<IGetOrders, "products"> & { products: string };
+
+const columns: { key: keyof ProcessedOrder; label: string; isAction?: boolean }[] = [
     { key: "total", label: "Total" },
     { key: "products", label: "Products" },
     { key: "date", label: "Order Date" },
@@ -30,7 +32,7 @@ export function Orders() {
         products: Array.isArray(order.products)
             ? order.products.map((product) => product.name).join(", ")
             : order.products,
-        date: format(parseISO(order.date), "yyyy-MM-dd"), // Format date
+        date: format(parseISO(order.date), "yyyy-MM-dd"),
     }));
 
     const { mutateAsync: createOrderFn } = useMutation({

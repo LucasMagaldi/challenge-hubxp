@@ -2,16 +2,16 @@ import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { BaseList } from "../components/base-list";
 import { getProducts, createProduct, removeProduct, IGetProducts, updateProduct } from "../hooks/api-products";
-const columns=[
+
+const columns: { key: keyof IGetProducts; label: string; isAction?: boolean }[] = [
     { key: "name", label: "Product Name" },
     { key: "description", label: "Description" },
     { key: "price", label: "$ Price" },
     { key: "categories", label: "Categories" },
-    { key: "imageUrl", label: "Image URL"},
+    { key: "imageUrl", label: "Image URL" },
     { key: "edit", label: "Edit", isAction: true },
     { key: "remove", label: "Remove", isAction: true },
-]
-
+];
 const productSchema = z.object({
     name: z.string().min(1, "Product name is required"),
     description: z.string().min(5, "Description should have at least 5 characters"),

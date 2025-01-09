@@ -24,7 +24,13 @@ export function DataTable<T extends Record<string, React.ReactNode>>({
     onRemove,
 }: DataTableProps<T>) {
     return (
-        <TableContainer component={Paper} sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
+        <TableContainer component={Paper} 
+        sx={{ 
+            backgroundColor: "transparent", 
+            boxShadow: "none",
+            maxHeight: "510px",
+            overflowY: "auto",
+        }}>
             <Table>
                 <TableHead>
                     <TableRow>
