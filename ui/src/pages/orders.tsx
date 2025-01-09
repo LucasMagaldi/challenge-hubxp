@@ -1,3 +1,4 @@
+import { format, parseISO } from "date-fns";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BaseList } from "../components/base-list";
 import { createOrder, getOrders, IGetOrders, removeOrder, updateOrder } from "../hooks/api-orders";
@@ -13,6 +14,7 @@ const columns = [
 
 const orderSchema = z.object({
     total: z.coerce.number().min(0, "Total must be a positive number"),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
 });
 
 export function Orders() {
@@ -28,6 +30,7 @@ export function Orders() {
         products: Array.isArray(order.products)
             ? order.products.map((product) => product.name).join(", ")
             : order.products,
+        date: format(parseISO(order.date), "yyyy-MM-dd"), // Format date
     }));
 
     const { mutateAsync: createOrderFn } = useMutation({

@@ -47,10 +47,11 @@ export async function createOrder({ total, date }: IPostOrder) {
     }
 }
 
-export async function updateOrder({ _id, total }: IGetOrders) {
+export async function updateOrder({ _id, total, date }: IGetOrders) {
     try {
         await api.patch(`/orders/${_id}`, {
-            total
+            total,
+            date
         })
     } catch (error) {
         console.log(error)
