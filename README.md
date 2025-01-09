@@ -13,21 +13,21 @@ The project uses the services such as a NestJS backend, a React frontend, a Serv
 ## Prerequisites
 Before running this project, ensure you have the following installed:
 
-Docker
-Docker Compose
+- Docker
+- Docker Compose
 
 ##  Environment Variables
 # Backend Service (backend)
-MONGO_URL: MongoDB connection string.
-S3_BUCKET_NAME: Name of the S3 bucket for image storage.
-S3_ENDPOINT: Endpoint for LocalStack S3.
-AWS_REGION: AWS region for S3.
-AWS_SECRET_ACCESS_KEY: AWS secret access key for authentication.
-AWS_ACCESS_KEY_ID: AWS access key ID for authentication.
+- MONGO_URL: MongoDB connection string.
+- S3_BUCKET_NAME: Name of the S3 bucket for image storage.
+- S3_ENDPOINT: Endpoint for LocalStack S3.
+- AWS_REGION: AWS region for S3.
+- AWS_SECRET_ACCESS_KEY: AWS secret access key for authentication.
+- AWS_ACCESS_KEY_ID: AWS access key ID for authentication.
 # Frontend Service (ui)
-VITE_API_URL: Backend API URL.
+- VITE_API_URL: Backend API URL.
 # Serverless Service (serverless)
-MONGO_URL: MongoDB connection string.
+- MONGO_URL: MongoDB connection string.
 
 ## Services
 This project is defined with the following services in the docker-compose.yml:
