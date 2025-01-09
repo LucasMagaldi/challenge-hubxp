@@ -67,14 +67,8 @@ MongoDB: Use a MongoDB client or CLI to connect to mongodb://root:root@localhost
 The function connects to the MongoDB database using the URL specified in the MONGO_URL environment variable. If the connection fails, the function logs an error and does not process the report.
 
 ### Response:
-{
-  "message": "Sales report generated successfully!",
-  "report": {
-    "totalRevenue": 888,
-    "totalOrders": 7,
-    "averageOrderValue": 127
-  }
-}
+![image](https://github.com/user-attachments/assets/84159b81-0a2e-4f49-9a3c-910b93a94e6d)
+
 
 ## Ensure all services are running using docker-compose ps.
 - Verify the environment variables MONGO_URL, MONGO_INITDB_ROOT_USERNAME, and MONGO_INITDB_ROOT_PASSWORD.
