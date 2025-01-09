@@ -52,11 +52,15 @@ Serverless: Access serverless endpoints via http://localhost:3000.
 LocalStack: Verify S3 bucket setup at http://localhost:4566.
 MongoDB: Use a MongoDB client or CLI to connect to mongodb://root:root@localhost:27017.
 
-## Directory Structure
-.
-├── backend/              # Backend service (NestJS)
-├── ui/                   # Frontend service (React)
-├── serverless-app/       # Serverless functions
-├── docker-compose.yml    # Docker Compose configuration
-└── README.md             # Project documentation
+## Development Notes
+- LocalStack: Simulates AWS services like S3 locally. Ensure localstack-data volume persists bucket data.
+  
+
+# Ensure all services are running using docker-compose ps.
+- Verify the environment variables MONGO_URL, MONGO_INITDB_ROOT_USERNAME, and MONGO_INITDB_ROOT_PASSWORD.
+# Useful Commands
+- Stop all services: docker-compose down
+- Rebuild services: docker-compose up --build
+- Access service logs: docker-compose logs <service-name>
+
 
