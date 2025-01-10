@@ -8,6 +8,7 @@ import {
   ArrayUnique,
   Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 interface CategoriesByProduct {
   _id: string;
@@ -24,6 +25,7 @@ export class CreateProductDTO {
   description: string;
 
   @IsNotEmpty({ message: 'The price is required.' })
+  @Type(() => Number)
   @IsNumber({}, { message: 'The price must be a number.' })
   @Min(0, { message: 'The price cannot be negative.' })
   price: number;

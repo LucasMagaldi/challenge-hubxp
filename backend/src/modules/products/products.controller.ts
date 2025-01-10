@@ -83,4 +83,26 @@ export class ProductController {
         if (!allowedTypes.includes(file.mimetype)) {
           return callback(
             new BadRequestException(
-              'Invalid file type.
+              'Invalid file type. Only PNG and JPEG are allowed.',
+            ),
+            false,
+          );
+        }
+        callback(null, true);
+      },
+      limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+    }),
+  )
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: Partial<CreateProductDTO>,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.productService.update(id, updateProductDto, file);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    return this.productService.remove(id);
+  }
+}
