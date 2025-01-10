@@ -1,51 +1,96 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Category } from './categories.schema';
-import { CategoryDTO, createCategoryDTO } from './categories.dto';
+import { Model, isValidObjectId } from 'mongoose';
+import { Category, CategoryDocument } from './categories.schema';
+import { CreateCategoryDTO, CategoryDTO } from './categories.dto';
 
 @Injectable()
 export class CategoryService {
   constructor(
-    @InjectModel(Category.name) private categoryModel: Model<Category>,
+    @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
   ) {}
 
-  async create(createProductDto: createCategoryDTO): Promise<Category> {
-    const category = new this.categoryModel(createProductDto);
-    return category.save();
+  async create(createCategoryDto: CreateCategoryDTO): Promise<CategoryDTO> {
+    try {
+      const category = new this.categoryModel(createCategoryDto);
+      const savedCategory = await category.save();
+      return this.toDTO(savedCategory);
+    } catch (error) {
+      throw new InternalServerErrorException('Error while creating category.');
+    }
   }
 
   async findAll(): Promise<CategoryDTO[]> {
-    const category = await this.categoryModel.find().exec();
-    return category.map((category) => ({
-      _id: category._id.toString(),
-      name: category.name,
-    }));
+    try {
+      const categories = await this.categoryModel.find().exec();
+      return categories.map((category) => this.toDTO(category));
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error while fetching categories.',
+      );
+    }
   }
 
-  async findOne(id: string): Promise<Category> {
+  async findOne(id: string): Promise<CategoryDTO> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('Invalid ID.');
+    }
+
     const category = await this.categoryModel.findById(id).exec();
-    if (!category) throw new NotFoundException('Category not found');
-    return category;
+    if (!category) {
+      throw new NotFoundException('Category not found.');
+    }
+
+    return this.toDTO(category);
   }
 
   async update(
     id: string,
-    updateCategoryDto: Partial<createCategoryDTO>,
-  ): Promise<Category> {
-    const category = await this.categoryModel.findByIdAndUpdate(
-      id,
-      updateCategoryDto,
-      {
-        new: true,
-      },
-    );
-    if (!category) throw new NotFoundException('Category not found');
-    return category;
+    updateCategoryDto: Partial<CreateCategoryDTO>,
+  ): Promise<CategoryDTO> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('Invalid ID.');
+    }
+
+    try {
+      const category = await this.categoryModel.findByIdAndUpdate(
+        id,
+        updateCategoryDto,
+        { new: true },
+      );
+
+      if (!category) {
+        throw new NotFoundException('Category not found.');
+      }
+
+      return this.toDTO(category);
+    } catch (error) {
+      throw new InternalServerErrorException('Error while updating category.');
+    }
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<{ message: string }> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('Invalid ID.');
+    }
+
     const result = await this.categoryModel.findByIdAndDelete(id);
-    if (!result) throw new NotFoundException('Category not found');
+    if (!result) {
+      throw new NotFoundException('Category not found.');
+    }
+
+    return { message: 'Category successfully deleted.' };
+  }
+
+  private toDTO(category: CategoryDocument): CategoryDTO {
+    return {
+      _id: category._id.toString(),
+      name: category.name,
+    };
   }
 }
