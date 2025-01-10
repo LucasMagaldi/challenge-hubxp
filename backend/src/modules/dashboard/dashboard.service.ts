@@ -20,19 +20,16 @@ export class DashboardService {
   ): Promise<any> {
     const match: any = {};
 
-    // Filtros de Período
     if (startDate || endDate) {
       match.date = {};
       if (startDate) match.date.$gte = startDate;
       if (endDate) match.date.$lte = endDate;
     }
 
-    // Filtros de Produtos
     if (productIds?.length) {
       match.products = { $in: productIds.map((id) => new Types.ObjectId(id)) };
     }
 
-    // Filtros de Categorias
     if (categoryIds?.length) {
       const categoryProducts = await this.productModel
         .find(
@@ -57,7 +54,6 @@ export class DashboardService {
       }
     }
 
-    // Agregação para métricas e número de orders por data
     const metrics = await this.orderModel.aggregate([
       { $match: match },
       {
